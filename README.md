@@ -1,24 +1,20 @@
-# The Things Network: iC880a-based gateway
+# Raspberry-PI-Link-Labs-LoRaWAN-Gateway
 
-Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways based on the iC880a SPI concentrator with a Raspberry Pi host.
-
-This installer targets the **SPI version** of the board, if you have the USB version, [check this branch](https://github.com/ttn-zh/ic880a-gateway/tree/master).
+Reference setup for LoRaWAN Gateway based on a Raspberry Pi host and the Link Labs [Gateway Board](http://store.link-labs.com/products/lorawan-raspberry-pi-board).
 
 ## Hardware setup
 
-First, connect the concentrator board to the Raspberry Pi as follows:
+[schematic](http://forum.thethingsnetwork.org/uploads/default/original/1X/dbdd7deb2b854bb7104019d79683f2d1ae9f1c51.pdf)
 
-Note: Pin 1-20 are on the bottom side of the concentrator board (viewed from the top), pin 21-23 on the top,left side of the board
-
-iC880a pin      | Description   | RPi physical pin
-----------------|---------------|-----------------
-21              | Supply 5V     | 2
-22              | GND           | 6
-13              | Reset         | 22
-14              | SPI CLK       | 23
-15              | MISO          | 21
-16              | MOSI          | 19
-17              | NSS           | 24
+| Description   | RPi pin
+|---------------|-----------------
+| Supply 5V     | 2
+| GND           | 6
+| Reset         | 22
+| SPI CLK       | 23
+| MISO          | 21
+| MOSI          | 19
+| NSS           | 24
 
 Now you're ready to start the software setup.
 
