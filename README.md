@@ -47,19 +47,19 @@ Now you're ready to start the software setup.
         $ sudo apt-get autoclean
         $ sudo apt-get update
 
-- Create new user for TTN and add it to sudoers
+- Create new user for linklabs and add it to sudoers
 
-        $ sudo adduser ttn 
-        $ sudo adduser ttn sudo
+        $ sudo adduser linklabs 
+        $ sudo adduser linklabs sudo
 
-- Logout and login as `ttn` and remove the default `pi` user
+- Logout and login as `linklabs` and remove the default `pi` user
 
         $ sudo userdel -rf pi
 
 - Clone the installer and start the installation
 
-        $ git clone https://github.com/ttn-zh/ic880a-gateway.git ~/ic880a-gateway
-        $ cd ~/ic880a-gateway
+        $ git clone https://github.com/mirakonta/Raspberry-PI-Link-Labs-LoRaWAN-Gateway.git ~/linklabs
+        $ cd ~/linklabs
         $ sudo ./install.sh spi
 
 
