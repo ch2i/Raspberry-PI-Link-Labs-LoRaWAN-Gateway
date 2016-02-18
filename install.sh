@@ -11,7 +11,7 @@ fi
 VERSION="spi"
 if [[ $1 != "" ]]; then VERSION=$1; fi
 
-echo "The Things Network Gateway installer"
+echo "Link Labs Gateway installer"
 echo "Version $VERSION"
 
 # Update the gateway installer to the correct branch
@@ -29,9 +29,9 @@ fi
 
 # Retrieve gateway configuration for later
 echo "Configure your gateway:"
-printf "       Descriptive name [ttn-ic880a]:"
+printf "       Descriptive name [linklabs]:"
 read GATEWAY_NAME
-if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="ttn-ic880a"; fi
+if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="linklabs"; fi
 
 printf "       Contact email: "
 read GATEWAY_EMAIL
@@ -65,7 +65,7 @@ echo "Installing dependencies..."
 apt-get install swig python-dev
 
 # Install LoRaWAN packet forwarder repositories
-INSTALL_DIR="/opt/ttn-gateway"
+INSTALL_DIR="/opt/linklabs"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
@@ -85,7 +85,7 @@ popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/TheThingsNetwork/lora_gateway.git
+    git clone https://github.com/Lora-net/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
@@ -101,7 +101,7 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+    git clone https://github.com/Lora-net/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
@@ -113,11 +113,13 @@ make
 
 popd
 
-# Symlink poly packet forwarder
+# Symlink
 if [ ! -d bin ]; then mkdir bin; fi
-if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
-ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
-cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
+if [ -f ./bin/gps_pkt_fwd ]; then rm ./bin/gps_pkt_fwd; fi
+ln -s $INSTALL_DIR/packet_forwarder/basic_pkt_fwd/basic_pkt_fwd ./bin/basic_pkt_fwd
+ln -s $INSTALL_DIR/packet_forwarder/beacon_pkt_fwd/beacon_pkt_fwd ./bin/beacon_pkt_fwd
+ln -s $INSTALL_DIR/packet_forwarder/gps_pkt_fwd/gps_pkt_fwd ./bin/gps_pkt_fwd
+cp -f ./packet_forwarder/gps_pkt_fwd/global_conf.json ./bin/global_conf.json
 
 echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
 
@@ -130,8 +132,8 @@ echo "Installation completed."
 
 # Start packet forwarder as a service
 cp ./start.sh $INSTALL_DIR/bin/
-cp ./ttn-gateway.service /lib/systemd/system/
-systemctl enable ttn-gateway.service
+cp ./linklabs.service /lib/systemd/system/
+systemctl enable linklabs.service
 
 echo "The system will reboot in 5 seconds..."
 sleep 5
