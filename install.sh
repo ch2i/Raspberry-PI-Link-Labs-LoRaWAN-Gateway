@@ -8,14 +8,11 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
-VERSION="spi"
-if [[ $1 != "" ]]; then VERSION=$1; fi
-
 echo "Link Labs Gateway installer"
-echo "Version $VERSION"
 
 # Update the gateway installer to the correct branch
 echo "Updating installer files..."
+VERSION="spi"
 OLD_HEAD=$(git rev-parse HEAD)
 git fetch
 git checkout -q $VERSION
@@ -24,17 +21,21 @@ NEW_HEAD=$(git rev-parse HEAD)
 
 if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     echo "New installer found. Restarting process..."
-    exec "./install.sh" "$VERSION"
+    exec "./install.sh"
 fi
 
 # Retrieve gateway configuration for later
-echo "Configure your gateway:"
-printf "       Descriptive name [linklabs]:"
-read GATEWAY_NAME
-if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="linklabs"; fi
+printf "       server_address [iot.semtech.com]: "
+read SERVER_AD
+if [[ $SERVER_AD == "" ]]; then SERVER_AD="iot.semtech.com"; fi
 
-printf "       Contact email: "
-read GATEWAY_EMAIL
+printf "       serv_port_up [1680]: "
+read PORT_UP
+if [[ $PORT_UP == "" ]]; then PORT_UP="1680"; fi
+
+printf "       serv_port_down [1680]: "
+read PORT_DOWN
+if [[ $PORT_DOWN == "" ]]; then PORT_DOWN="1680"; fi
 
 printf "       Latitude [0]: "
 read GATEWAY_LAT
@@ -47,18 +48,6 @@ if [[ $GATEWAY_LON == "" ]]; then GATEWAY_LON=0; fi
 printf "       Altitude [0]: "
 read GATEWAY_ALT
 if [[ $GATEWAY_ALT == "" ]]; then GATEWAY_ALT=0; fi
-
-
-# Change hostname if needed
-CURRENT_HOSTNAME=$(hostname)
-NEW_HOSTNAME="ttn-gateway"
-
-if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
-    echo "Updating hostname to '$NEW_HOSTNAME'..."
-    hostname $NEW_HOSTNAME
-    echo $NEW_HOSTNAME > /etc/hostname
-    sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/" /etc/hosts
-fi
 
 # Check dependencies
 echo "Installing dependencies..."
@@ -121,7 +110,7 @@ ln -s $INSTALL_DIR/packet_forwarder/beacon_pkt_fwd/beacon_pkt_fwd ./bin/beacon_p
 ln -s $INSTALL_DIR/packet_forwarder/gps_pkt_fwd/gps_pkt_fwd ./bin/gps_pkt_fwd
 cp -f ./packet_forwarder/gps_pkt_fwd/global_conf.json ./bin/global_conf.json
 
-echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
+echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"$GATEWAY_AD\", \"serv_port_up\": $PORT_UP, \"serv_port_down\": $PORT_DOWN, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
 
 # Reset gateway ID based on MAC
 ./packet_forwarder/reset_pkt_fwd.sh start ./bin/local_conf.json
