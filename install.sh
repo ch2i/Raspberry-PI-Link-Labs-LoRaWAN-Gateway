@@ -25,6 +25,7 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
 fi
 
 # Retrieve gateway configuration for later
+echo "Configure your gateway:"
 printf "       server_address [iot.semtech.com]: "
 read SERVER_AD
 if [[ $SERVER_AD == "" ]]; then SERVER_AD="iot.semtech.com"; fi
