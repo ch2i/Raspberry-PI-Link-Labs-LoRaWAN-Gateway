@@ -1,0 +1,12 @@
+[Unit]
+Description=Link Labs LoRa Gateway
+
+[Service]
+WorkingDirectory=/opt/linklabs/bin/
+ExecStart=/opt/linklabs/bin/start.sh
+SyslogIdentifier=linklabs
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
