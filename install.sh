@@ -24,32 +24,6 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     exec "./install.sh"
 fi
 
-# Retrieve gateway configuration for later
-echo "Configure your gateway:"
-printf "       server_address [iot.semtech.com]: "
-read SERVER_AD
-if [[ $SERVER_AD == "" ]]; then SERVER_AD="iot.semtech.com"; fi
-
-printf "       serv_port_up [1680]: "
-read PORT_UP
-if [[ $PORT_UP == "" ]]; then PORT_UP="1680"; fi
-
-printf "       serv_port_down [1680]: "
-read PORT_DOWN
-if [[ $PORT_DOWN == "" ]]; then PORT_DOWN="1680"; fi
-
-printf "       Latitude [0]: "
-read GATEWAY_LAT
-if [[ $GATEWAY_LAT == "" ]]; then GATEWAY_LAT=0; fi
-
-printf "       Longitude [0]: "
-read GATEWAY_LON
-if [[ $GATEWAY_LON == "" ]]; then GATEWAY_LON=0; fi
-
-printf "       Altitude [0]: "
-read GATEWAY_ALT
-if [[ $GATEWAY_ALT == "" ]]; then GATEWAY_ALT=0; fi
-
 # Check dependencies
 echo "Installing dependencies..."
 apt-get install swig python-dev
@@ -108,8 +82,6 @@ ln -s $INSTALL_DIR/packet_forwarder/basic_pkt_fwd/basic_pkt_fwd ./bin/basic_pkt_
 ln -s $INSTALL_DIR/packet_forwarder/beacon_pkt_fwd/beacon_pkt_fwd ./bin/beacon_pkt_fwd
 ln -s $INSTALL_DIR/packet_forwarder/gps_pkt_fwd/gps_pkt_fwd ./bin/gps_pkt_fwd
 cp -f ./packet_forwarder/gps_pkt_fwd/global_conf.json ./bin/global_conf.json
-
-echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"$GATEWAY_AD\", \"serv_port_up\": $PORT_UP, \"serv_port_down\": $PORT_DOWN, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
 
 # Reset gateway ID based on MAC
 ./packet_forwarder/reset_pkt_fwd.sh start ./bin/local_conf.json
