@@ -8,13 +8,13 @@ Reference setup for LoRaWAN Gateway based on a Raspberry Pi host and the Link La
 
 | Description   | RPi pin
 |---------------|-----------------
-| Supply 5V     | 2
-| GND           | 6
-| Reset         | 22
+| SX1301 Reset  | 29 GPIO5 output
+| GPS Reset     | 31 GPIO6 output
+| PPS           |  7 GPIO4 input
 | SPI CLK       | 23
-| MISO          | 21
-| MOSI          | 19
-| NSS           | 24
+| SPI MISO      | 21
+| SPI MOSI      | 19
+| SPI NSS       | 24
 
 Now you're ready to start the software setup.
 
