@@ -83,8 +83,6 @@ else
     git pull
 fi
 
-sed -i -e 's/PLATFORM= kerlink/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
-
 make
 
 popd
