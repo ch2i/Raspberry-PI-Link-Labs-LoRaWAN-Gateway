@@ -1,12 +1,12 @@
 #! /bin/bash
 
 # Reset PIN
-gpio -1 mode 22 out
-gpio -1 write 22 0
+gpio -1 mode 29 out
+gpio -1 write 29 0
 sleep 0.1
-gpio -1 write 22 1
+gpio -1 write 29 1
 sleep 0.1
-gpio -1 write 22 0
+gpio -1 write 29 0
 sleep 0.1
 
 # Test the connection, wait if needed.
