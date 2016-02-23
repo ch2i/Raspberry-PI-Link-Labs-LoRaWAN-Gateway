@@ -57,6 +57,8 @@ else
     git pull
 fi
 
+sed -i 's/cs_change = 1/cs_change = 0/g' libloragw/src/loragw_spi.native.c
+
 make
 
 popd
