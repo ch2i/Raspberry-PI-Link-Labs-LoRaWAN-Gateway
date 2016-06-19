@@ -58,7 +58,7 @@ Now you're ready to start the software setup.
 
 - Clone the installer and start the installation
 
-        $ git clone https://github.com/mirakonta/Raspberry-PI-Link-Labs-LoRaWAN-Gateway.git ~/linklabs
+        $ git clone https://github.com/kersing/Raspberry-PI-Link-Labs-LoRaWAN-Gateway.git ~/linklabs
         $ cd ~/linklabs
         $ sudo ./install.sh
 
