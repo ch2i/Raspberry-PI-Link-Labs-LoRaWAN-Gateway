@@ -49,7 +49,7 @@ popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/Lora-net/lora_gateway.git
+    git clone https://github.com/TheThingsNetwork/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
@@ -57,6 +57,7 @@ else
     git pull
 fi
 
+sed -i 's/PLATFORM= kerlink/PLATFORM= linklabs_blowfish_rpi/g' libloragw/library.cfg
 sed -i 's/cs_change = 1/cs_change = 0/g' libloragw/src/loragw_spi.native.c
 
 make
@@ -65,7 +66,7 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/Lora-net/packet_forwarder.git
+    git clone https://github.com/kersing/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
@@ -79,22 +80,34 @@ popd
 
 # Symlink
 if [ ! -d bin ]; then mkdir bin; fi
+if [ -f ./bin/basic_pkt_fwd ]; then rm ./bin/basic_pkt_fwd; fi
 if [ -f ./bin/gps_pkt_fwd ]; then rm ./bin/gps_pkt_fwd; fi
+if [ -f ./bin/beacon_pkt_fwd ]; then rm ./bin/beacon_pkt_fwd; fi
+if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/basic_pkt_fwd/basic_pkt_fwd ./bin/basic_pkt_fwd
 ln -s $INSTALL_DIR/packet_forwarder/beacon_pkt_fwd/beacon_pkt_fwd ./bin/beacon_pkt_fwd
 ln -s $INSTALL_DIR/packet_forwarder/gps_pkt_fwd/gps_pkt_fwd ./bin/gps_pkt_fwd
-cp -f ./packet_forwarder/gps_pkt_fwd/global_conf.json ./bin/global_conf.json
+ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
+
+# create configuration
+if [ ! -d config ]; then mkdir config; fi
+cp $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/local_conf.json ./config/local_conf.json
+wget https://raw.githubusercontent.com/TheThingsNetwork/gateway-conf/master/EU-global_conf.json -O config/global_conf.json -o /dev/null --no-check-certificate
 
 # Reset gateway ID based on MAC
-./packet_forwarder/reset_pkt_fwd.sh start ./bin/local_conf.json
+./packet_forwarder/reset_pkt_fwd.sh start ./config/local_conf.json
 
 popd
 
 echo "Installation completed."
 
+# Remove tty on serial port to enable access to GPS
+systemctl stop serial-getty@ttyAMA0.service
+systemctl disable serial-getty@ttyAMA0.service
+
 # Start packet forwarder as a service
 cp ./start.sh $INSTALL_DIR/bin/
-cp ./linklabs.service /lib/systemd/system/
+cp ./linklabs.service /etc/systemd/system/
 systemctl enable linklabs.service
 
 echo "The system will reboot in 5 seconds..."

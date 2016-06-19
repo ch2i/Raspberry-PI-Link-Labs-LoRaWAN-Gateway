@@ -66,3 +66,5 @@ Now you're ready to start the software setup.
 # Credits
 
 These scripts are largely based on the awesome work by [Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank).
+This repository has been forked from https://github.com/mirakonta/Raspberry-PI-Link-Labs-LoRaWAN-Gateway, the changes were made to use older gateway software
+required because The Things Network does not yet support the new protocol used by the newest Lora-net/packet_forwarder.
