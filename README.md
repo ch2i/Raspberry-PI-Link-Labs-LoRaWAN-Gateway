@@ -6,17 +6,19 @@ Reference setup for LoRaWAN Gateway based on a Raspberry Pi host and the Link La
 
 [schematic](http://forum.thethingsnetwork.org/uploads/default/original/1X/dbdd7deb2b854bb7104019d79683f2d1ae9f1c51.pdf)
 
+GPIO Mapping for linklabs Raspberry PI Shield
+
 | Description | RPi pin | BCM GPIO | WiringPi | Mode
 | :---: | :---: | :---: | :---: | :---:
-| SX1301 Reset  | 29 | GPIO5  |   | output
-| GPS Reset     | 31 | GPIO6  |   | output
-| PPS           | 7  | GPIO4  | 7 | input  
-| SPI CLK       | 23 |        |   | 
-| SPI MISO      | 21 |        |   | 
-| SPI MOSI      | 19 |        |   | 
-| SPI NSS       | 24 |        |   | 
-| LED 1         | 13 | GPIO27 | 2 | output
-| LED 2         | 22 | GPIO25 | 6 | output
+| SX1301 Reset  | 29 | GPIO5  | 21 | output
+| GPS Reset     | 31 | GPIO6  | 22 | output
+| GPS PPS       | 7  | GPIO4  | 7  | input  
+| SPI CLK       | 23 |        |    | 
+| SPI MISO      | 21 |        |    | 
+| SPI MOSI      | 19 |        |    | 
+| SPI NSS       | 24 |        |    | 
+| LED 1         | 13 | GPIO27 | 2  | output
+| LED 2         | 22 | GPIO25 | 6  | output
 
 Now you're ready to start the software setup.
 
@@ -64,13 +66,11 @@ Now you're ready to start the software setup.
         $ cd ~/linklabs
         $ sudo ./install.sh
 
-- Recommanded, put your Raspberry PI in Read Only mode to protect sour SD Card
-
-        Follow Charles's [blog entry](https://hallard.me/raspberry-pi-read-only/) to do it.
+- Recommanded, put your Raspberry PI in Read Only mode to protect sour SD Card. Follow Charles's [blog entry](https://hallard.me/raspberry-pi-read-only/) to do it.
 
 # Led Management
 
-on linklabs Raspberry Pi board, LED 1 and LED 2 will light on as soon as service is running, then 
+On linklabs Raspberry Pi board, LED 1 and LED 2 will light on as soon as service is running, then 
 - LED 1 will blink (light off for short time) if GPS satellites are acquired (even if GPS is disabled in config), in fact GPS PPS output pin is redirected to LED GPIO output pin by software.
 - LED 2 will blink (light off for short time) on each packet received.
 
