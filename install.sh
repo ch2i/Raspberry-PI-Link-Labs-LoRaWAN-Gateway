@@ -57,7 +57,7 @@ else
     git pull
 fi
 
-sed -i 's/PLATFORM= kerlink/PLATFORM= linklabs_blowfish_rpi/g' libloragw/library.cfg
+sed -i 's/PLATFORM= kerlink/PLATFORM= linklabs_blowfish_rpi\nLINKLABS_BLOWFISH_RPI= 1/g' libloragw/library.cfg
 sed -i 's/cs_change = 1/cs_change = 0/g' libloragw/src/loragw_spi.native.c
 
 make
