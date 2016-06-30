@@ -66,7 +66,7 @@ Now you're ready to start the software setup.
         $ cd ~/linklabs
         $ sudo ./install.sh
 
-- Recommanded, put your Raspberry PI in Read Only mode to protect sour SD Card. Follow Charles's [blog entry](https://hallard.me/raspberry-pi-read-only/) to do it.
+- Recommended, put your Raspberry PI in Read Only mode to protect sour SD Card. Follow Charles's [blog entry](https://hallard.me/raspberry-pi-read-only/) to do it.
 
 # Led Management
 
@@ -78,5 +78,5 @@ On linklabs Raspberry Pi board, LED 1 and LED 2 will light on as soon as service
 
 These scripts are largely based on the awesome work by [Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank).
 This repository has been forked from https://github.com/mirakonta/Raspberry-PI-Link-Labs-LoRaWAN-Gateway, the changes were made to use older gateway software
-required because The Things Network does not yet support the new protocol used by the newest Lora-net/packet_forwarder.
+required because The Things Network does not yet support the new protocol used by the newest Lora-net/packet_forwarder.    
 Then forked from https://github.com/kersing/Raspberry-PI-Link-Labs-LoRaWAN-Gateway, to add led support
